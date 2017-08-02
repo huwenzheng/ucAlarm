@@ -1,0 +1,26 @@
+#!/bin/bash
+# @Auther : huwenzheng
+# @Date   : 2017/1/6
+# @Purpose: build the go project
+
+
+if [ ! -f install ]; then
+echo 'install must be run within its container folder' 1>&2
+exit 1
+fi
+
+CURDIR=`pwd`
+OLDGOPATH="$GOPATH"
+export GOPATH="$CURDIR"
+gofmt -w src
+
+go install ucAlarm
+export GOPATH="$OLDGOPATH"
+
+rm -rf ucAlarm/
+mkdir -p ucAlarm
+mkdir -p ucAlarm/conf
+cp -rf bin ucAlarm/
+cp -f ucaOption.sh ucAlarm/
+cp -f src/ucAlarm/ucAlarm.conf ucAlarm/conf/
+echo 'finished'

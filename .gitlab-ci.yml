@@ -1,0 +1,15 @@
+before_script:
+  - version=`git log --pretty=format:"%H" -n 1 | cut -c1-10`
+  - gitBranch=`git describe --contains --all HEAD|tr -s '\n'`
+  - gitBranch="${gitBranch}_Zone"
+  - chmod 755 -R *
+
+build_ucAlarm:
+  script:
+  - rm -fr /utry_workspace/ucAlarm
+  - mkdir -p /utry_workspace/ucAlarm
+  - cp * /utry_workspace/ucAlarm/ -rf
+  - cd /utry_workspace/ucAlarm
+  - ./install
+  - tar cvf ucAlarm_output_${version}.tar ./ucAlarm
+  - sh /home/ciCommon.sh ucAlarm ucAlarm_output_${version}.tar $gitBranch
